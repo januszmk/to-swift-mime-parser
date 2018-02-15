@@ -285,6 +285,7 @@ class MimeParser
     protected function createMessage(array $message, \Swift_Mime_MimeEntity $entity)
     {
         if (stripos($message ["type"], 'multipart/') !== false) {
+            $nestingLevel = \Swift_Mime_MimeEntity::LEVEL_TOP;
 
             if (strpos($message ["type"], '/alternative')) {
                 $nestingLevel = \Swift_Mime_MimeEntity::LEVEL_ALTERNATIVE;
