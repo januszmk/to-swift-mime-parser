@@ -47,12 +47,12 @@ class HeaderDecoder
                 case 'q' :
                     $out .= self::convertCharset(preg_replace_callback('/=([0-9a-f]{2})/i', function ($ord) {
                         return chr(hexdec($ord [1]));
-                    }, str_replace('_', ' ', $encoded_text)), $orig_charset, 'UTF-8');
+                    }, str_replace('_', ' ', $encoded_text)), $orig_charset, mb_internal_encoding());
                     break;
 
                 case 'B' :
                 case 'b' :
-                    $out .= self::convertCharset(base64_decode($encoded_text), $orig_charset, 'UTF-8');
+                    $out .= self::convertCharset(base64_decode($encoded_text), $orig_charset, mb_internal_encoding());
                     break;
 
                 default :
@@ -68,7 +68,6 @@ class HeaderDecoder
 
     public static function convertCharset($str, $orig, $to)
     {
-        //@todo convert charset
-        return $str;
+        return mb_convert_encoding($str, $to, $orig);
     }
 }
