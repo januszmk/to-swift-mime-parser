@@ -187,22 +187,36 @@ class MimeParser
     private function extractHeaderParts($header)
     {
         if (stripos($header, ';') !== false) {
-
             $parts = explode(";", $header);
             array_shift($parts);
             $p = array();
+            $part = '';
             foreach ($parts as $pv) {
-                if (!trim($pv)) {
+
+                if (preg_match('/="[^"]+$/', $pv)) {
+                    $part = $pv;
+                    continue;
+                }
+                if ($part !== '') {
+                    $part .= ';' . $pv;
+                    if (preg_match('/="[^"]+$/', $part)) {
+                        continue;
+                    } else {
+                        $pv = $part;
+                    }
+                }
+                if (strpos($pv, '=') === false) {
                     continue;
                 }
                 list ($k, $v) = explode("=", trim($pv), 2);
-                $p [$k] = trim($v, '"');
+                $p[$k] = trim($v, '"');
             }
             return $p;
         } else {
             return array();
         }
     }
+
     protected function extractPart($stream, $boundary, $encoding)
     {
         $rows = array();
