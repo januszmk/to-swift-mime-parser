@@ -73,6 +73,6 @@ class HeaderDecoder
 
     private static function convertCharset(string $str, string $orig, string $to)
     {
-        return mb_convert_encoding($str, $to, $orig);
+        return iconv($orig, sprintf('%s//TRANSLIT//IGNORE', $to), $str);
     }
 }
