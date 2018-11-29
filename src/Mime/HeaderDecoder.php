@@ -73,6 +73,10 @@ class HeaderDecoder
 
     private static function convertCharset(string $str, string $orig, string $to)
     {
+        if (strcasecmp($orig, $to) === 0) {
+            return $str;
+        }
+
         return iconv($orig, sprintf('%s//TRANSLIT//IGNORE', $to), $str);
     }
 }
