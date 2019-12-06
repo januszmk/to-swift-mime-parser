@@ -306,7 +306,12 @@ class MimeParser
                     }
                     break;
                 case "date":
-                    $headers->addDateHeader($name, new \DateTime($value));
+                    try {
+                        $date = new \DateTime($value);
+                    } catch (\Exception $e) {
+                        $date = \DateTime::createFromFormat('D, d M Y H:i:s e+', $value);
+                    }
+                    $headers->addDateHeader($name, $date);
                     break;
                 case "to":
                 case "from":
