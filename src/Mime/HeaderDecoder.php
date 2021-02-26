@@ -73,6 +73,8 @@ class HeaderDecoder
 
     private static function convertCharset(string $str, string $orig, string $to)
     {
+	$str = mb_decode_mimeheader($str);
+
         if (strcasecmp($orig, $to) === 0) {
             return $str;
         }
